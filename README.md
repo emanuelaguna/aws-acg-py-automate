@@ -16,7 +16,10 @@ the AWS Cli. e.g.
 
 ## Running
 
-`pipenv run python boto3-examples/ec2-list.py`
+`pipenv run python boto3-examples/ec2-list.py <command> <--project=PROJECT>`
+
+*command* in start, stop or list
+*project* is optional 
  
 
 
