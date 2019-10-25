@@ -20,6 +20,10 @@ def filter_instances(project):
 
     return instances
 
+def has_pending_snapshot(volume):
+    snapshots = list(volume.snapshots.all())
+    return snapshots and snapshots[0].state == 'pendding'
+
 @click.group()
 def cli():
     """Paco manages instnaces"""
@@ -30,7 +34,9 @@ def snapshots():
 
 @snapshots.command('list')
 @click.option('--project', default=None, help="Only snapshots for project tag project:<name>")
-def list_snapshots(project):
+@click.option('--all', 'list_all', default=False, is_flag=True,
+              help="List all snapshots of an instance even the oldest not just the most recents" )
+def list_snapshots(project, list_all):
     "List snapshots of an Instances"
 
     instances = filter_instances(project)
@@ -46,6 +52,7 @@ def list_snapshots(project):
                     s.progress,
                     s.start_time.strftime("%c")
                 )))
+                if s.state == 'completed' and not list_all: break
     return
 
 @cli.group('volumes')
@@ -87,6 +94,10 @@ def create_snapshot(project):
         i.wait_until_stopped()
 
         for v in i.volumes.all():
+            if has_pending_snapshot(v):
+                print(' Skipping {0}, it has already a pending snapshot in progress'.format(v.id))
+                continue
+
             print(" Creating a snapshot of ...{0}".format(v.id))
             v.create_snapshot(Description="Created by paco  automated bot")
 
@@ -100,6 +111,7 @@ def create_snapshot(project):
 
 @instances.command('list')
 @click.option('--project', default=None, help="Only instances for project tag project:<name>")
+
 def list_instances(project):
     "List EC2 Instances"
 

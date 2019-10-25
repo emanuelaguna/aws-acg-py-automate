@@ -16,9 +16,10 @@ the AWS Cli. e.g.
 
 ## Running
 
-`pipenv run python boto3-examples/ec2-list.py <command> <--project=PROJECT>`
+`pipenv run python snapshotty/ec2-list.py <command> <subcommand> <--project=PROJECT>`
 
-*command* in start, stop or list
+*command* are snapshot, instances, volumes 
+*subcommand* depends on command
 *project* is optional 
  
 

@@ -6,10 +6,12 @@ verify_ssl = true
 [dev-packages]
 ippython = "*"
 ipython = "*"
+setuptools = "==41.4.0"
 
 [packages]
 boto3 = "*"
 click = "*"
+setuptools = "*"
 
 [requires]
 python_version = "3.7"
